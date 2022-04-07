@@ -46,7 +46,6 @@
 <script>
 	import { ref } from 'vue';
 	import env from '@/env.js';
-	import axios from 'axios';
 
 	export default {
 		name: 'HomeView',
@@ -54,17 +53,18 @@
 			const search = ref('');
 			const movies = ref([]);
 
-			const HandleSearch = () => {
-				axios
-					.get(
+			const HandleSearch = async () => {
+				try {
+					movies.value = await fetch(
 						`http://www.omdbapi.com/?apikey=${env.apikey}&s=${search.value}`
 					)
-					.then((response) => {
-						movies.value = response.data.Search;
-
-						//console.log(movies.value);
-						search.value = '';
-					});
+						.then((res) => res.json())
+						.then((data) => data.Search);
+					//console.log(movies.value);
+					search.value = '';
+				} catch (e) {
+					console.error(e);
+				}
 			};
 
 			return {
