@@ -11,7 +11,6 @@
 	import { ref, onBeforeMount } from 'vue';
 	import { useRoute } from 'vue-router';
 	import env from '@/env.js';
-	import axios from 'axios';
 
 	export default {
 		name: 'MovieDetail',
@@ -20,12 +19,13 @@
 			const route = useRoute();
 
 			onBeforeMount(() => {
-				axios
-					.get(
-						`http://www.omdbapi.com/?apikey=${env.apikey}&i=${route.params.id}&plot=full`
-					)
-					.then((response) => {
-						movie.value = response.data;
+				fetch(
+					`http://www.omdbapi.com/?apikey=${env.apikey}&i=${route.params.id}&plot=full`
+				)
+					.then((res) => res.json())
+					.then((data) => {
+						movie.value = data;
+						//console.log(data);
 					});
 			});
 
