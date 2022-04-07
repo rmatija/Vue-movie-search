@@ -26,7 +26,8 @@
 					.then((data) => {
 						movie.value = data;
 						//console.log(data);
-					});
+					})
+					.catch((err) => console.log(err.message));
 			});
 
 			return {
